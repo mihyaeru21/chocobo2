@@ -1,5 +1,10 @@
 import React from 'react';
+import { Box, ChakraProvider } from '@chakra-ui/react';
 
 export default function App() {
-  return <div className="App">hoge</div>;
+  return (
+    <ChakraProvider>
+      <Box>hoge</Box>
+    </ChakraProvider>
+  );
 }
