@@ -1,6 +1,6 @@
 interface Item<T> {
   fuzzyName: string;
-  status: 'unidentified' | 'maybe' | 'identified';
+  status: 'unidentified' | 'predicted' | 'identified';
   price: number | null;
   concreteItem: T | null;
 }
@@ -36,7 +36,7 @@ export const cards: Array<Card> = [
   { id: 18, name: '変化カード', price: 200 },
 ];
 
-export const unidentifiedCards = [
+export const unidentifiedCardNames = [
   'やぶれかけのカード',
   'アナのあいたカード',
   'いろあせたカード',
