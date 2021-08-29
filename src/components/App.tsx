@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 const initialItems: Array<Item<Card>> = unidentifiedCards.map((uc) => ({
   fuzzyName: uc,
   status: 'unidentified',
-  sellingPrice: null,
+  price: null,
   concreteItem: null,
 }));
 
@@ -21,19 +21,19 @@ export default function App() {
       {
         fuzzyName: unidentifiedCards[0],
         status: 'unidentified',
-        sellingPrice: null,
+        price: null,
         concreteItem: null,
       },
       {
         fuzzyName: unidentifiedCards[1],
         status: 'maybe',
-        sellingPrice: 250,
+        price: 500,
         concreteItem: cards[8],
       },
       {
         fuzzyName: unidentifiedCards[2],
         status: 'identified',
-        sellingPrice: 50,
+        price: 100,
         concreteItem: cards[10],
       },
     ]);

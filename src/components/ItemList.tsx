@@ -36,7 +36,7 @@ export default function ItemList({ items }: Props) {
                 <Center>{statusBadge(item)}</Center>
               </Td>
               <Td>{viewName(item)}</Td>
-              <Td isNumeric>{item.sellingPrice ?? '???'}</Td>
+              <Td isNumeric>{item.price ?? '???'}</Td>
             </Tr>
           ))}
         </Tbody>
