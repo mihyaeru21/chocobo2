@@ -1,5 +1,5 @@
 import { useCallback, useContext, useState } from 'react';
-import { uniq } from 'lodash-es';
+import { uniq, some } from 'lodash-es';
 import {
   Button,
   HStack,
@@ -12,9 +12,11 @@ import {
   Select,
 } from '@chakra-ui/react';
 import DispatchContext from './DispatchContext';
-import { allCards, Item } from 'logics/data';
+import { allCards, Item, Category, ConcreteItem } from 'logics/data';
+import { useEffect } from 'react';
 
 interface Props {
+  category: Category;
   fuzzyName: string | null;
   onClose: () => void;
   items: Array<Item>;
@@ -25,25 +27,39 @@ interface State {
   price: number | undefined;
 }
 
-export default function ItemList({ fuzzyName, onClose, items }: Props) {
+export default function ItemList({
+  category,
+  fuzzyName,
+  onClose,
+  items,
+}: Props) {
   const [state, setState] = useState<State>({
     itemId: undefined,
     price: undefined,
   });
   const dispatch = useContext(DispatchContext);
 
+  const close = useCallback(() => {
+    setState({ itemId: undefined, price: undefined });
+    onClose();
+  }, [onClose]);
+
   const handleItemChanged = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
-      const itemId = Number(event.target.value);
-      setState((s) => ({ ...s, itemId }));
+      if (event.target.value != null) {
+        const itemId = Number(event.target.value);
+        setState((s) => ({ ...s, itemId }));
+      }
     },
     []
   );
 
   const handlePriceChanged = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
-      const price = Number(event.target.value);
-      setState((s) => ({ ...s, price }));
+      if (event.target.value != null) {
+        const price = Number(event.target.value);
+        setState((s) => ({ ...s, price }));
+      }
     },
     []
   );
@@ -54,14 +70,13 @@ export default function ItemList({ fuzzyName, onClose, items }: Props) {
         type: 'identify',
         payload: {
           fuzzyName,
-          itemType: 'card',
+          category,
           itemId: state.itemId,
         },
       });
     }
-    setState({ itemId: undefined, price: undefined });
-    onClose();
-  }, [fuzzyName, state.itemId, dispatch, onClose]);
+    close();
+  }, [category, fuzzyName, state.itemId, dispatch, close]);
 
   const predict = useCallback(() => {
     if (fuzzyName != null && state.itemId != null) {
@@ -69,14 +84,13 @@ export default function ItemList({ fuzzyName, onClose, items }: Props) {
         type: 'predict',
         payload: {
           fuzzyName,
-          itemType: 'card',
+          category,
           itemId: state.itemId,
         },
       });
     }
-    setState({ itemId: undefined, price: undefined });
-    onClose();
-  }, [fuzzyName, state.itemId, dispatch, onClose]);
+    close();
+  }, [category, fuzzyName, state.itemId, dispatch, close]);
 
   const setPrice = useCallback(() => {
     if (fuzzyName != null && state.price != null) {
@@ -84,21 +98,33 @@ export default function ItemList({ fuzzyName, onClose, items }: Props) {
         type: 'setPrice',
         payload: {
           fuzzyName,
-          itemType: 'card',
+          category,
           price: state.price,
         },
       });
     }
-    setState({ itemId: undefined, price: undefined });
-    onClose();
-  }, [fuzzyName, state.price, dispatch, onClose]);
+    close();
+  }, [category, fuzzyName, state.price, dispatch, close]);
 
   const isOpen = fuzzyName != null;
-  const selectableItems = allCards; // TODO: 選択できるやつは props で受けとる
+
+  // すでに選択されているものは選べなくする
+  const selectableItems = getAllItems(category).filter(
+    (ai) => !some(items, (i) => i.concreteItem?.id === ai.id)
+  );
   const selectablePrices = uniq(selectableItems.map((i) => i.price).sort());
+  const firstItemId = selectableItems[0]?.id;
+  const firstPrice = selectablePrices[0];
+
+  // 開いた時に選択可能なやつの1つ目を選択しておく
+  useEffect(() => {
+    if (isOpen) {
+      setState({ itemId: firstItemId, price: firstPrice });
+    }
+  }, [firstItemId, firstPrice, isOpen]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={close}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{fuzzyName}</ModalHeader>
@@ -131,4 +157,13 @@ export default function ItemList({ fuzzyName, onClose, items }: Props) {
       </ModalContent>
     </Modal>
   );
+}
+
+function getAllItems(category: Category): Array<ConcreteItem> {
+  switch (category) {
+    case 'card':
+      return allCards;
+    default:
+      return allCards; // TODO: 他の種類
+  }
 }

@@ -11,7 +11,9 @@ interface ConcreteItem {
   price: number;
 }
 
-export type { Item, ConcreteItem };
+type Category = 'card' | 'liquid' | 'collar';
+
+export type { Item, ConcreteItem, Category };
 
 // data from https://chu-a-ko.ssl-lolipop.jp/choco-dan2/01_item.htm
 

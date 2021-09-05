@@ -3,6 +3,7 @@ import {
   ConcreteItem,
   unidentifiedCardNames,
   allCards,
+  Category,
 } from 'logics/data';
 import { groupBy, partition, some } from 'lodash-es';
 
@@ -12,17 +13,17 @@ export interface State {
 
 interface ActionIdentify {
   type: 'identify';
-  payload: { fuzzyName: string; itemType: 'card'; itemId: number };
+  payload: { fuzzyName: string; category: Category; itemId: number };
 }
 
 interface ActionPredict {
   type: 'predict';
-  payload: { fuzzyName: string; itemType: 'card'; itemId: number };
+  payload: { fuzzyName: string; category: Category; itemId: number };
 }
 
 interface ActionSetPrice {
   type: 'setPrice';
-  payload: { fuzzyName: string; itemType: 'card'; price: number };
+  payload: { fuzzyName: string; category: Category; price: number };
 }
 
 export type Action = ActionIdentify | ActionPredict | ActionSetPrice;

@@ -11,7 +11,7 @@ export default function App() {
   return (
     <ChakraProvider>
       <DispatchContext.Provider value={dispatch}>
-        <ItemList items={state.cards} />
+        <ItemList category="card" items={state.cards} />
       </DispatchContext.Provider>
     </ChakraProvider>
   );

@@ -10,13 +10,14 @@ import {
 } from '@chakra-ui/react';
 import ItemRow from 'components/ItemRow';
 import EditingModal from 'components/EditingModal';
-import type { Item } from 'logics/data';
+import type { Item, Category } from 'logics/data';
 
 interface Props {
+  category: Category;
   items: Array<Item>;
 }
 
-export default function ItemList({ items }: Props) {
+export default function ItemList({ category, items }: Props) {
   const [editingFuzzyName, setEditingFuzzyName] = useState<string | null>(null);
 
   const openModal = useCallback((fuzzyName: string) => {
@@ -46,6 +47,7 @@ export default function ItemList({ items }: Props) {
         </Tbody>
       </Table>
       <EditingModal
+        category={category}
         fuzzyName={editingFuzzyName}
         onClose={closeModal}
         items={items}
