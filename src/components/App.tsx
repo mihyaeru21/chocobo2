@@ -11,12 +11,15 @@ export default function App() {
   return (
     <ChakraProvider>
       <DispatchContext.Provider value={dispatch}>
-        <Grid templateColumns="1fr 1fr" gap="4">
+        <Grid templateColumns="1fr 1fr 1fr" gap="4">
           <GridItem>
             <ItemList category="card" items={state.cards} />
           </GridItem>
           <GridItem>
             <ItemList category="liquid" items={state.liquids} />
+          </GridItem>
+          <GridItem>
+            <ItemList category="collar" items={state.collars} />
           </GridItem>
         </Grid>
       </DispatchContext.Provider>

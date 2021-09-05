@@ -5,12 +5,14 @@ import {
   Category,
   unidentifiedLiquidNames,
   getAllItems,
+  unidentifiedCollarNames,
 } from 'logics/data';
 import { groupBy, partition, some } from 'lodash-es';
 
 export interface State {
   cards: Array<Item>;
   liquids: Array<Item>;
+  collars: Array<Item>;
 }
 
 interface ActionIdentify {
@@ -43,10 +45,15 @@ export const initialState: State = {
     price: null,
     concreteItem: null,
   })),
+  collars: unidentifiedCollarNames.map((uc) => ({
+    fuzzyName: uc,
+    status: 'unidentified',
+    price: null,
+    concreteItem: null,
+  })),
 };
 
-// State のキー
-type Key = 'cards' | 'liquids';
+type Key = keyof State;
 
 export function reduce(state: State, action: Action): State {
   switch (action.type) {
@@ -170,7 +177,7 @@ function getKeyByCategory(category: Category): Key {
     case 'liquid':
       return 'liquids';
     case 'collar':
-      return 'cards'; // TODO
+      return 'collars';
   }
 }
 

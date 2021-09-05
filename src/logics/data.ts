@@ -103,13 +103,62 @@ export const unidentifiedLiquidNames = [
   'ペタペタするくすり',
 ];
 
+export const allCollars: Array<ConcreteItem> = [
+  { id: 1, name: '忘れない首輪', price: 4000 },
+  { id: 2, name: '魔物の首輪', price: 4000 },
+  { id: 3, name: 'ガードの首輪', price: 4000 },
+  { id: 4, name: '命づなの首輪', price: 4000 },
+  { id: 5, name: '耐魔の首輪', price: 4000 },
+  { id: 6, name: '魔法の首輪', price: 4000 },
+  { id: 7, name: '健康の首輪', price: 4000 },
+  { id: 8, name: 'がまんの首輪', price: 4000 },
+  { id: 9, name: '回復の首輪', price: 4000 },
+  { id: 10, name: '不幸の首輪', price: 4000 },
+  { id: 11, name: 'スタミナの首輪', price: 4000 },
+  { id: 12, name: '肩こりの首輪', price: 4000 },
+  { id: 13, name: 'からぶりの首輪', price: 4000 },
+  { id: 14, name: '呪いの首輪', price: 4000 },
+  { id: 15, name: '値切りの首輪', price: 15000 },
+  { id: 16, name: 'アメンボの首輪', price: 15000 },
+  { id: 17, name: 'ワナぬけの首輪', price: 15000 },
+  { id: 18, name: 'ばちあたりの首輪', price: 15000 },
+  { id: 19, name: 'ツメマニアの首輪', price: 15000 },
+  { id: 20, name: 'クラマニアの首輪', price: 15000 },
+  { id: 21, name: 'ブランドの首輪', price: 65000 },
+];
+
+export const unidentifiedCollarNames = [
+  'いけてる首輪',
+  'エッジな首輪',
+  'きつきつの首輪',
+  'エナメルの首輪',
+  'よごれた首輪',
+  'ブカブカな首輪',
+  'おしゃれな首輪',
+  'おとこらしい首輪',
+  'マハロな首輪',
+  'ごつごつした首輪',
+  'さびてる首輪',
+  'シブイ首輪',
+  'シンプルな首輪',
+  'ゆがんだ首輪',
+  'ゴージャスな首輪',
+  'とげのついた首輪',
+  'ドロだらけの首輪',
+  'ハデな首輪',
+  'おおきめの首輪',
+  'ずっしりくる首輪',
+  'けずりだしの首輪',
+  'メッシュの首輪',
+];
+
 export function getAllItems(category: Category): Array<ConcreteItem> {
   switch (category) {
     case 'card':
       return allCards;
     case 'liquid':
       return allLiquids;
-    default:
-      return allCards; // TODO: 他の種類
+    case 'collar':
+      return allCollars;
   }
 }
