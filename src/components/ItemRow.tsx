@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import { Badge, Center, Td, Tr } from '@chakra-ui/react';
-import type { Item, Card } from 'logics/data';
+import type { Item } from 'logics/data';
 
 interface Props {
-  item: Item<Card>;
+  item: Item;
   openModal: (fuzzyName: string) => void;
 }
 
@@ -23,7 +23,7 @@ export default function ItemRow({ item, openModal }: Props) {
   );
 }
 
-function statusBadge<T>(item: Item<T>): React.ReactNode {
+function statusBadge(item: Item): React.ReactNode {
   switch (item.status) {
     case 'identified':
       return <Badge colorScheme="green">識別済</Badge>;
@@ -34,7 +34,7 @@ function statusBadge<T>(item: Item<T>): React.ReactNode {
   }
 }
 
-function viewName(item: Item<Card>): string {
+function viewName(item: Item): string {
   switch (item.status) {
     case 'identified':
       return item.concreteItem?.name ?? '';

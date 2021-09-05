@@ -1,21 +1,21 @@
-interface Item<T> {
+interface Item {
   fuzzyName: string;
   status: 'unidentified' | 'predicted' | 'identified';
   price: number | null;
-  concreteItem: T | null;
+  concreteItem: ConcreteItem | null;
 }
 
-interface Card {
+interface ConcreteItem {
   id: number;
   name: string;
   price: number;
 }
 
-export type { Item, Card };
+export type { Item, ConcreteItem as Card };
 
 // data from https://chu-a-ko.ssl-lolipop.jp/choco-dan2/01_item.htm
 
-export const cards: Array<Card> = [
+export const cards: Array<ConcreteItem> = [
   { id: 1, name: '識別のカード', price: 100 },
   { id: 2, name: '確信のカード', price: 500 },
   { id: 3, name: 'わき水のカード', price: 300 },

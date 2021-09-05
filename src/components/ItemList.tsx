@@ -1,93 +1,31 @@
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
-  Button,
   Center,
   Container,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Table,
   Tbody,
   Th,
   Thead,
   Tr,
-  useDisclosure,
 } from '@chakra-ui/react';
 import ItemRow from 'components/ItemRow';
-import type { Item, Card } from 'logics/data';
-import DispatchContext from './DispatchContext';
+import EditingModal from 'components/EditingModal';
+import type { Item } from 'logics/data';
 
 interface Props {
-  items: Array<Item<Card>>;
+  items: Array<Item>;
 }
 
 export default function ItemList({ items }: Props) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [fuzzyName, setFuzzyName] = useState<string | null>(null);
-  const [itemId, setItemId] = useState<number | null>(null);
-  const [price, setPrice] = useState<number | null>(null);
-  const dispatch = useContext(DispatchContext);
+  const [editingFuzzyName, setEditingFuzzyName] = useState<string | null>(null);
 
-  const openModal = useCallback(
-    (fuzzyName: string) => {
-      setFuzzyName(fuzzyName);
-      onOpen();
-    },
-    [onOpen]
-  );
+  const openModal = useCallback((fuzzyName: string) => {
+    setEditingFuzzyName(fuzzyName);
+  }, []);
 
   const closeModal = useCallback(() => {
-    onClose();
-    setFuzzyName(null);
-    setItemId(null);
-    setPrice(null);
-  }, [onClose]);
-
-  const identify = useCallback(() => {
-    if (fuzzyName != null && itemId != null) {
-      dispatch({
-        type: 'identify',
-        payload: {
-          fuzzyName: fuzzyName,
-          itemType: 'card',
-          itemId,
-        },
-      });
-    }
-    closeModal();
-  }, [fuzzyName, itemId, dispatch, closeModal]);
-
-  const predict = useCallback(() => {
-    if (fuzzyName != null && itemId != null) {
-      dispatch({
-        type: 'predict',
-        payload: {
-          fuzzyName: fuzzyName,
-          itemType: 'card',
-          itemId,
-        },
-      });
-    }
-    closeModal();
-  }, [fuzzyName, itemId, dispatch, closeModal]);
-
-  const setPriceAction = useCallback(() => {
-    if (fuzzyName != null && price != null) {
-      dispatch({
-        type: 'setPrice',
-        payload: {
-          fuzzyName: fuzzyName,
-          itemType: 'card',
-          price,
-        },
-      });
-    }
-    closeModal();
-  }, [fuzzyName, price, closeModal, dispatch]);
+    setEditingFuzzyName(null);
+  }, []);
 
   return (
     <Container maxW="container.sm">
@@ -107,25 +45,11 @@ export default function ItemList({ items }: Props) {
           ))}
         </Tbody>
       </Table>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>{fuzzyName}</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>hoge</ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" onClick={setPriceAction}>
-              金額設定
-            </Button>
-            <Button colorScheme="blue" onClick={predict}>
-              推測
-            </Button>
-            <Button colorScheme="blue" onClick={identify}>
-              確定
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <EditingModal
+        fuzzyName={editingFuzzyName}
+        onClose={closeModal}
+        items={items}
+      />
     </Container>
   );
 }

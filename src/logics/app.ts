@@ -1,7 +1,7 @@
-import { Card, Item, unidentifiedCardNames } from 'logics/data';
+import { Item, unidentifiedCardNames } from 'logics/data';
 
 export interface State {
-  cards: Array<Item<Card>>;
+  cards: Array<Item>;
 }
 
 export type Action =
