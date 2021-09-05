@@ -136,7 +136,11 @@ export default function ItemList({
                 <option value={p}>{p}</option>
               ))}
             </Select>
-            <Button colorScheme="blue" onClick={setPrice}>
+            <Button
+              colorScheme="blue"
+              onClick={setPrice}
+              disabled={selectablePrices.length === 0}
+            >
               金額設定
             </Button>
           </HStack>
@@ -146,10 +150,18 @@ export default function ItemList({
                 <option value={i.id}>{i.name}</option>
               ))}
             </Select>
-            <Button colorScheme="blue" onClick={predict}>
+            <Button
+              colorScheme="blue"
+              onClick={predict}
+              disabled={selectableItems.length === 0}
+            >
               推測
             </Button>
-            <Button colorScheme="blue" onClick={identify}>
+            <Button
+              colorScheme="blue"
+              onClick={identify}
+              disabled={selectableItems.length === 0}
+            >
               確定
             </Button>
           </HStack>
