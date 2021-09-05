@@ -12,7 +12,7 @@ import {
   Select,
 } from '@chakra-ui/react';
 import DispatchContext from './DispatchContext';
-import { cards, Item } from 'logics/data';
+import { allCards, Item } from 'logics/data';
 
 interface Props {
   fuzzyName: string | null;
@@ -94,7 +94,7 @@ export default function ItemList({ fuzzyName, onClose, items }: Props) {
   }, [fuzzyName, state.price, dispatch, onClose]);
 
   const isOpen = fuzzyName != null;
-  const selectableItems = cards; // TODO: 選択できるやつは props で受けとる
+  const selectableItems = allCards; // TODO: 選択できるやつは props で受けとる
   const selectablePrices = uniq(selectableItems.map((i) => i.price).sort());
 
   return (

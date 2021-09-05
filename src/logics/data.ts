@@ -11,11 +11,11 @@ interface ConcreteItem {
   price: number;
 }
 
-export type { Item, ConcreteItem as Card };
+export type { Item, ConcreteItem };
 
 // data from https://chu-a-ko.ssl-lolipop.jp/choco-dan2/01_item.htm
 
-export const cards: Array<ConcreteItem> = [
+export const allCards: Array<ConcreteItem> = [
   { id: 1, name: '識別のカード', price: 100 },
   { id: 2, name: '確信のカード', price: 500 },
   { id: 3, name: 'わき水のカード', price: 300 },
