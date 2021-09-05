@@ -12,7 +12,7 @@ import {
   Select,
 } from '@chakra-ui/react';
 import DispatchContext from './DispatchContext';
-import { allCards, Item, Category, ConcreteItem } from 'logics/data';
+import { Item, Category, getAllItems } from 'logics/data';
 import { useEffect } from 'react';
 
 interface Props {
@@ -157,13 +157,4 @@ export default function ItemList({
       </ModalContent>
     </Modal>
   );
-}
-
-function getAllItems(category: Category): Array<ConcreteItem> {
-  switch (category) {
-    case 'card':
-      return allCards;
-    default:
-      return allCards; // TODO: 他の種類
-  }
 }

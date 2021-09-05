@@ -2,13 +2,15 @@ import {
   Item,
   ConcreteItem,
   unidentifiedCardNames,
-  allCards,
   Category,
+  unidentifiedLiquidNames,
+  getAllItems,
 } from 'logics/data';
 import { groupBy, partition, some } from 'lodash-es';
 
 export interface State {
   cards: Array<Item>;
+  liquids: Array<Item>;
 }
 
 interface ActionIdentify {
@@ -35,7 +37,16 @@ export const initialState: State = {
     price: null,
     concreteItem: null,
   })),
+  liquids: unidentifiedLiquidNames.map((uc) => ({
+    fuzzyName: uc,
+    status: 'unidentified',
+    price: null,
+    concreteItem: null,
+  })),
 };
+
+// State のキー
+type Key = 'cards' | 'liquids';
 
 export function reduce(state: State, action: Action): State {
   switch (action.type) {
@@ -49,87 +60,118 @@ export function reduce(state: State, action: Action): State {
 }
 
 function actionIdentify(state: State, action: ActionIdentify): State {
-  const concreteItem = findCardById(action.payload.itemId);
+  const concreteItem = findItemById(
+    action.payload.category,
+    action.payload.itemId
+  );
   if (concreteItem == null) {
     return state;
   }
 
-  return optimizeState({
+  const key = getKeyByCategory(action.payload.category);
+  return {
     ...state,
-    cards: replace(state.cards, action.payload.fuzzyName, {
-      fuzzyName: action.payload.fuzzyName,
-      status: 'identified',
-      price: concreteItem.price,
-      concreteItem,
-    }),
-  });
+    [key]: optimizeItems(
+      action.payload.category,
+      replace(state[key], action.payload.fuzzyName, {
+        fuzzyName: action.payload.fuzzyName,
+        status: 'identified',
+        price: concreteItem.price,
+        concreteItem,
+      })
+    ),
+  };
 }
 
 function actionPredict(state: State, action: ActionPredict): State {
-  const concreteItem = findCardById(action.payload.itemId);
+  const concreteItem = findItemById(
+    action.payload.category,
+    action.payload.itemId
+  );
   if (concreteItem == null) {
     return state;
   }
 
-  return optimizeState({
+  const key = getKeyByCategory(action.payload.category);
+  return {
     ...state,
-    cards: replace(state.cards, action.payload.fuzzyName, {
-      fuzzyName: action.payload.fuzzyName,
-      status: 'predicted',
-      price: concreteItem.price,
-      concreteItem,
-    }),
-  });
+    [key]: optimizeItems(
+      action.payload.category,
+      replace(state[key], action.payload.fuzzyName, {
+        fuzzyName: action.payload.fuzzyName,
+        status: 'predicted',
+        price: concreteItem.price,
+        concreteItem,
+      })
+    ),
+  };
 }
 
 function actionSetPrice(state: State, action: ActionSetPrice): State {
-  return optimizeState({
+  const key = getKeyByCategory(action.payload.category);
+  return {
     ...state,
-    cards: replace(state.cards, action.payload.fuzzyName, {
-      fuzzyName: action.payload.fuzzyName,
-      status: 'unidentified',
-      price: action.payload.price,
-      concreteItem: null,
-    }),
-  });
+    [key]: optimizeItems(
+      action.payload.category,
+      replace(state[key], action.payload.fuzzyName, {
+        fuzzyName: action.payload.fuzzyName,
+        status: 'unidentified',
+        price: action.payload.price,
+        concreteItem: null,
+      })
+    ),
+  };
 }
 
-function optimizeState(state: State): State {
-  const cards = state.cards;
-  const group = groupBy(allCards, (c) => c.price);
-  for (const [p, allPCards] of Object.entries(group)) {
+function optimizeItems(category: Category, items: Item[]): Item[] {
+  const group = groupBy(getAllItems(category), (c) => c.price);
+  for (const [p, allPItems] of Object.entries(group)) {
     const price = Number(p); // entries を通すと string になっちゃう
 
-    const pCards = cards.filter((c) => c.price === price);
-    const [unidentifiedCars, predictedCards] = partition(
-      pCards,
+    const pItems = items.filter((c) => c.price === price);
+    const [unidentifiedItems, predictedItems] = partition(
+      pItems,
       (c) => c.status === 'unidentified'
     );
 
     // ある金額の中で未推測が1個以外が推測済みなら残り1個も推測できる
     if (
-      unidentifiedCars.length === 1 &&
-      predictedCards.length === allPCards.length - 1
+      unidentifiedItems.length === 1 &&
+      predictedItems.length === allPItems.length - 1
     ) {
-      // まだ使われていない card を探して割り当てる
-      const unusedCard = allCards.find(
+      // まだ使われていないやつを探して割り当てる
+      const unusedItem = getAllItems(category).find(
         (c) =>
           c.price === price &&
-          !some(cards, (cc) => cc.concreteItem?.id === c.id)
+          !some(items, (cc) => cc.concreteItem?.id === c.id)
       );
-      if (unusedCard) {
-        const card = unidentifiedCars[0];
-        card.concreteItem = unusedCard;
+      if (unusedItem) {
+        const card = unidentifiedItems[0];
+        card.concreteItem = unusedItem;
         card.status = 'predicted';
       }
     }
   }
 
-  return state;
+  return items;
 }
 
-function findCardById(id: number): ConcreteItem | undefined {
-  return allCards.find((c) => c.id === id);
+function findItemById(
+  category: Category,
+  id: number
+): ConcreteItem | undefined {
+  return getAllItems(category).find((c) => c.id === id);
+}
+
+function getKeyByCategory(category: Category): Key {
+  switch (category) {
+    case 'card':
+      return 'cards';
+    case 'liquid':
+      return 'liquids';
+    case 'collar':
+      return 'cards'; // TODO
+  }
 }
 
 function replace(array: Array<Item>, fuzzyName: string, item: Item) {

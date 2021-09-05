@@ -1,5 +1,5 @@
 import { useReducer } from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, Grid, GridItem } from '@chakra-ui/react';
 
 import DispatchContext from 'components/DispatchContext';
 import ItemList from 'components/ItemList';
@@ -11,7 +11,14 @@ export default function App() {
   return (
     <ChakraProvider>
       <DispatchContext.Provider value={dispatch}>
-        <ItemList category="card" items={state.cards} />
+        <Grid templateColumns="1fr 1fr" gap="4">
+          <GridItem>
+            <ItemList category="card" items={state.cards} />
+          </GridItem>
+          <GridItem>
+            <ItemList category="liquid" items={state.liquids} />
+          </GridItem>
+        </Grid>
       </DispatchContext.Provider>
     </ChakraProvider>
   );

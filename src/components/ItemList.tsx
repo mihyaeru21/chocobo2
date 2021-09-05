@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import {
   Center,
   Container,
+  Heading,
   Table,
   Tbody,
   Th,
@@ -17,6 +18,12 @@ interface Props {
   items: Array<Item>;
 }
 
+const categoryToLabel: { [key in Category]: string } = {
+  card: 'カード',
+  liquid: '薬',
+  collar: '首輪',
+};
+
 export default function ItemList({ category, items }: Props) {
   const [editingFuzzyName, setEditingFuzzyName] = useState<string | null>(null);
 
@@ -30,6 +37,11 @@ export default function ItemList({ category, items }: Props) {
 
   return (
     <Container maxW="container.sm">
+      <Center>
+        <Heading as="h1" size="lg">
+          {categoryToLabel[category]}
+        </Heading>
+      </Center>
       <Table size="sm">
         <Thead>
           <Tr>

@@ -58,3 +58,58 @@ export const unidentifiedCardNames = [
   'つぎはぎのカード',
   'まっさらなカード',
 ];
+
+export const allLiquids: Array<ConcreteItem> = [
+  { id: 1, name: 'ポーション', price: 50 },
+  { id: 2, name: 'ハイポーション', price: 200 },
+  { id: 3, name: 'エクスポーション', price: 500 },
+  { id: 4, name: 'エリクサー', price: 1000 },
+  { id: 5, name: '解毒剤', price: 100 },
+  { id: 6, name: '万能薬', price: 500 },
+  { id: 7, name: '爆発薬', price: 50 },
+  { id: 8, name: 'ダメージ薬', price: 500 },
+  { id: 9, name: 'ヘイストの薬', price: 500 },
+  { id: 10, name: 'スロウの薬', price: 500 },
+  { id: 11, name: '毒薬', price: 500 },
+  { id: 12, name: 'サイレスの薬', price: 800 },
+  { id: 13, name: '目にいい薬', price: 100 },
+  { id: 14, name: 'くらやみの薬', price: 100 },
+  { id: 15, name: '変化の薬', price: 100 },
+  { id: 16, name: '忘れんぼうの薬', price: 200 },
+  { id: 17, name: '透明薬', price: 300 },
+  { id: 18, name: 'デスペルの薬', price: 300 },
+  { id: 19, name: 'スペルの薬', price: 300 },
+];
+
+export const unidentifiedLiquidNames = [
+  'ペロペロのくすり',
+  'ジュルジュルのくすり',
+  'ワクワクなくすり',
+  'プルプルしたくすり',
+  'ガシガシなくすり',
+  'トロトロなくすり',
+  'ギトギトのくすり',
+  'ピカーンとくるくすり',
+  'ギラギラしたくすり',
+  'クエエエのくすり',
+  'デロデロなくすり',
+  'ドキドキのくすり',
+  'グニャグニャのくすり',
+  'ベタベタなくすり',
+  'ヌメヌメなくすり',
+  'サラサラしたくすり',
+  'フニフニしたくすり',
+  'プクプクしたくすり',
+  'ペタペタするくすり',
+];
+
+export function getAllItems(category: Category): Array<ConcreteItem> {
+  switch (category) {
+    case 'card':
+      return allCards;
+    case 'liquid':
+      return allLiquids;
+    default:
+      return allCards; // TODO: 他の種類
+  }
+}
