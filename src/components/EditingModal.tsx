@@ -112,7 +112,9 @@ export default function ItemList({
   const selectableItems = getAllItems(category).filter(
     (ai) => !some(items, (i) => i.concreteItem?.id === ai.id)
   );
-  const selectablePrices = uniq(selectableItems.map((i) => i.price).sort());
+  const selectablePrices = uniq(selectableItems.map((i) => i.price)).sort(
+    (a, b) => a - b
+  );
   const firstItemId = selectableItems[0]?.id;
   const firstPrice = selectablePrices[0];
 
