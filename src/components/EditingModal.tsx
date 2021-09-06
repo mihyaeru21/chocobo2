@@ -7,6 +7,7 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   ModalOverlay,
   Select,
@@ -168,6 +169,7 @@ export default function ItemList({
             </Button>
           </HStack>
         </ModalBody>
+        <ModalFooter></ModalFooter>
       </ModalContent>
     </Modal>
   );

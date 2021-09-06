@@ -11,7 +11,7 @@ export default function App() {
   return (
     <ChakraProvider>
       <DispatchContext.Provider value={dispatch}>
-        <Grid templateColumns="1fr 1fr 1fr" gap="4">
+        <Grid templateColumns="1fr 1fr 1fr" gap="4" mt="12">
           <GridItem>
             <ItemList category="card" items={state.cards} />
           </GridItem>

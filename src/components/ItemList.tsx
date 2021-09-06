@@ -42,7 +42,7 @@ export default function ItemList({ category, items }: Props) {
           {categoryToLabel[category]}
         </Heading>
       </Center>
-      <Table size="sm">
+      <Table size="sm" mt="2">
         <Thead>
           <Tr>
             <Th>
